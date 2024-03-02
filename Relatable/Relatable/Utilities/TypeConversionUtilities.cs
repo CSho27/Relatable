@@ -21,9 +21,11 @@ namespace Relatable.Utilities
       if(underlyingType.IsEnum)
       {
         var values = Enum.GetValues(underlyingType).Cast<object>();
-        return values.Single(v => (int)v == (int)value!);
+        return values.Single(v => (int)v == value.ConvertValue<int>());
       }
 
+      if (underlyingType == typeof(DateTime))
+        return value;
       if (underlyingType == typeof(sbyte))
         return Convert.ToSByte(value);
       if (underlyingType == typeof(byte))

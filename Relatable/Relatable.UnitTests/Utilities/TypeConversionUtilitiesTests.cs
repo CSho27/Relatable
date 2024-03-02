@@ -53,6 +53,24 @@ namespace Relatable.UnitTests.Utilities
     }
 
     [Fact]
+    public void ConvertValue_ConvertsToDateTime()
+    {
+      var x = DateTime.Now;
+      var result = x.ConvertValue<DateTime>();
+      result.ShouldBe(x);
+      result.GetType().ShouldBe(typeof(DateTime));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsToNullableDateTime()
+    {
+      var x = DateTime.Now;
+      var result = x.ConvertValue<DateTime?>();
+      result.ShouldNotBeNull();
+      result.GetType().ShouldBe(typeof(DateTime));
+    }
+
+    [Fact]
     public void ConvertValue_ConvertsToByte()
     {
       var x = new sbyte();
