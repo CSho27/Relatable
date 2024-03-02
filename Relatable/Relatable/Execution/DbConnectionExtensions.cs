@@ -23,5 +23,13 @@ namespace Relatable.Execution
       var result = await command.ExecuteScalarAsync();
       return result.ConvertValue<T>();
     }
+
+    public static IEnumerable<T> Execute<T>(this IDbConnection connection, string sql)
+    {
+      using var command = connection.CreateCommand();
+      command.CommandText = sql;
+      using var reader = command.ExecuteReader();
+      return reader.ReadAllRows<T>();
+    }
   }
 }
