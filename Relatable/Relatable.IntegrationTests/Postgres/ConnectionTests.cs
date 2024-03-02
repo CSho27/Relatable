@@ -9,7 +9,10 @@ namespace Relatable.IntegrationTests.Postgres
         [Fact]
         public void Postgres_CanConnect()
         {
+            // Arrange/Act
             using var connection = PostgresConnectionFactory.OpenConnection();
+
+            // Assert
             connection.State.ShouldBe(ConnectionState.Open);
         }
 
