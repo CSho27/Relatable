@@ -188,5 +188,19 @@ namespace Relatable.IntegrationTests.Postgres.Execution
       // Assert
       result.GetType().ShouldBe(typeof(TimeOnly));
     }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsUUID()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT TestUUID FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<Guid>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(Guid));
+    }
   }
 }
