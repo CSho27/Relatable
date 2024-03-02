@@ -27,7 +27,24 @@ namespace Relatable.Utilities
       if (underlyingType == typeof(DateOnly) && value.GetType() == typeof(DateTime))
       {
         var dateTime = (DateTime)value;
-        return new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+        return DateOnly.FromDateTime(dateTime);
+      }
+
+      if (underlyingType == typeof(TimeOnly) && value.GetType() == typeof(DateTime))
+      {
+        var dateTime = (DateTime)value;
+        return TimeOnly.FromDateTime(dateTime);
+      }
+      if(underlyingType == typeof(TimeOnly) && value.GetType() == typeof(TimeSpan))
+      {
+        var dateTime = (TimeSpan)value;
+        return TimeOnly.FromTimeSpan(dateTime);
+      }
+
+      if (underlyingType == typeof(TimeSpan) && value.GetType() == typeof(DateTime))
+      {
+        var dateTime = (DateTime)value;
+        return dateTime.TimeOfDay;
       }
 
       if (underlyingType == typeof(sbyte))

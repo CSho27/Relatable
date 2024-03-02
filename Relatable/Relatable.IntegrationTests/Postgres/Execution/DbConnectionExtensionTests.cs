@@ -106,7 +106,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     }
 
     [Fact]
-    public void ExecuteScalar_ReturnsDateOnly()
+    public void ExecuteScalar_ReturnsDateOnlyForDate()
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
@@ -117,6 +117,76 @@ namespace Relatable.IntegrationTests.Postgres.Execution
 
       // Assert
       result.GetType().ShouldBe(typeof(DateOnly));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsDateOnlyForDateTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedOn FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<DateOnly>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(DateOnly));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsTimeSpanForTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedTime FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<TimeSpan>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(TimeSpan));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsTimeSpanForDateTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedOn FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<TimeSpan>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(TimeSpan));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsTimeOnlyForTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedTime FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<TimeOnly>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(TimeOnly));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsTimeOnlyForDateTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedOn FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<TimeOnly>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(TimeOnly));
     }
   }
 }

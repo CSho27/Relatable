@@ -76,7 +76,7 @@ namespace Relatable.UnitTests.Utilities
       var x = DateTime.Now;
       var result = x.ConvertValue<DateOnly>();
       result.GetType().ShouldBe(typeof(DateOnly));
-      result.ShouldBe(new DateOnly(x.Year, x.Month, x.Day));
+      result.ShouldBe(DateOnly.FromDateTime(x));
     }
 
     [Fact]
@@ -86,6 +86,60 @@ namespace Relatable.UnitTests.Utilities
       var result = x.ConvertValue<DateOnly?>();
       result.ShouldNotBeNull();
       result.GetType().ShouldBe(typeof(DateOnly));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsDateTimeToTimeOnly()
+    {
+      var x = DateTime.Now;
+      var result = x.ConvertValue<TimeOnly>();
+      result.GetType().ShouldBe(typeof(TimeOnly));
+      result.ShouldBe(TimeOnly.FromDateTime(x));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsDateTimeToNullableTimeOnly()
+    {
+      DateTime? x = DateTime.Now;
+      var result = x.ConvertValue<TimeOnly?>();
+      result.ShouldNotBeNull();
+      result.GetType().ShouldBe(typeof(TimeOnly));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsTimeSpanToTimeOnly()
+    {
+      var x = DateTime.Now.TimeOfDay;
+      var result = x.ConvertValue<TimeOnly>();
+      result.GetType().ShouldBe(typeof(TimeOnly));
+      result.ShouldBe(TimeOnly.FromTimeSpan(x));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsTimeSpanToNullableTimeOnly()
+    {
+      TimeSpan? x = DateTime.Now.TimeOfDay;
+      var result = x.ConvertValue<TimeOnly?>();
+      result.ShouldNotBeNull();
+      result.GetType().ShouldBe(typeof(TimeOnly));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsToTimeSpan()
+    {
+      var x = DateTime.Now;
+      var result = x.ConvertValue<TimeSpan>();
+      result.GetType().ShouldBe(typeof(TimeSpan));
+      result.ShouldBe(x.TimeOfDay);
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsToNullableTimeSpan()
+    {
+      DateTime? x = DateTime.Now;
+      var result = x.ConvertValue<TimeSpan?>();
+      result.ShouldNotBeNull();
+      result.GetType().ShouldBe(typeof(TimeSpan));
     }
 
 
