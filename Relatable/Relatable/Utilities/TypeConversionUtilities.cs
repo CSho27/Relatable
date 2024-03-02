@@ -24,90 +24,31 @@ namespace Relatable.Utilities
         var values = Enum.GetValues(underlyingType).Cast<object>();
         return values.Single(v => (int)v == (int)value!);
       }
+
       if (underlyingType == typeof(sbyte))
-      {
-        var convertedValue = Convert.ToSByte(value);
-        return isNullable
-          ? new sbyte?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToSByte(value);
       if (underlyingType == typeof(byte))
-      {
-        var convertedValue = Convert.ToByte(value);
-        return isNullable
-          ? new byte?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToByte(value);
       if (underlyingType == typeof(bool))
-      {
-        var convertedValue = Convert.ToBoolean(value);
-        return isNullable
-          ? new bool?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToBoolean(value);
       if (underlyingType == typeof(short))
-      {
-        var convertedValue = Convert.ToInt16(value);
-        return isNullable
-          ? new short?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToInt16(value);
       if (underlyingType == typeof(ushort))
-      {
-        var convertedValue = Convert.ToUInt16(value);
-        return isNullable
-          ? new ushort?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToUInt16(value);
       if (underlyingType == typeof(int))
-      {
-        var convertedValue = Convert.ToInt32(value);
-        return isNullable
-          ? new int?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToInt32(value);
       if (underlyingType == typeof(uint))
-      {
-        var convertedValue = Convert.ToUInt32(value);
-        return isNullable
-          ? new uint?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToUInt32(value);
       if (underlyingType == typeof(long))
-      {
-        var convertedValue = Convert.ToInt64(value);
-        return isNullable
-          ? new long?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToInt64(value);
       if (underlyingType == typeof(ulong))
-      {
-        var convertedValue = Convert.ToUInt64(value);
-        return isNullable
-          ? new ulong?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToUInt64(value);
       if (underlyingType == typeof(float))
-      {
-        var convertedValue = Convert.ToSingle(value);
-        return isNullable
-          ? new float?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToSingle(value);
       if (underlyingType == typeof(double))
-      {
-        var convertedValue = Convert.ToDouble(value);
-        return isNullable
-          ? new double?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToDouble(value);
       if (underlyingType == typeof(decimal))
-      {
-        var convertedValue = Convert.ToDecimal(value);
-        return isNullable
-          ? new decimal?(convertedValue)
-          : convertedValue;
-      }
+        return Convert.ToDecimal(value);
 
       throw new ArgumentException($"Unsupported type {underlyingType.Name}");
     }
