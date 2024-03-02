@@ -7,10 +7,10 @@ namespace Relatable.Utilities
     {
       return value is null
         ? default!
-        : (T)ConvertValueType(value, typeof(T))!;
+        : (T)ConvertValueType(value, typeof(T));
     }
 
-    private static object? ConvertValueType(object? value, Type type)
+    private static object ConvertValueType(object value, Type type)
     {
       var isNullable = type.IsNullableValueType();
       var underlyingType = isNullable
@@ -24,8 +24,12 @@ namespace Relatable.Utilities
         return values.Single(v => (int)v == value.ConvertValue<int>());
       }
 
-      if (underlyingType == typeof(DateTime))
-        return value;
+      if (underlyingType == typeof(DateOnly) && value.GetType() == typeof(DateTime))
+      {
+        var dateTime = (DateTime)value;
+        return new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+      }
+
       if (underlyingType == typeof(sbyte))
         return Convert.ToSByte(value);
       if (underlyingType == typeof(byte))
@@ -50,8 +54,7 @@ namespace Relatable.Utilities
         return Convert.ToDouble(value);
       if (underlyingType == typeof(decimal))
         return Convert.ToDecimal(value);
-
-      throw new ArgumentException($"Unsupported type {underlyingType.Name}");
+      else return value;
     }
   }
 }

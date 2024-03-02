@@ -12,7 +12,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
-      var sql = "SELECT COUNT(*) FROM test";
+      var sql = "SELECT \"Id\" FROM test LIMIT 1";
 
       // Act
       var result = connection.ExecuteScalar<TestEnum>(sql);
@@ -40,7 +40,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
-      var sql = "SELECT COUNT(*) > 0 FROM test";
+      var sql = "SELECT \"Id\" FROM test LIMIT 1";
 
       // Act
       var result = connection.ExecuteScalar<bool>(sql);
@@ -54,7 +54,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
-      var sql = "SELECT COUNT(*) FROM test";
+      var sql = "SELECT \"Id\" FROM test LIMIT 1";
 
       // Act
       var result = connection.ExecuteScalar<short>(sql);
@@ -68,7 +68,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
-      var sql = "SELECT COUNT(*) FROM test";
+      var sql = "SELECT \"Id\" FROM test LIMIT 1";
 
       // Act
       var result = connection.ExecuteScalar<int>(sql);
@@ -82,13 +82,41 @@ namespace Relatable.IntegrationTests.Postgres.Execution
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
-      var sql = "SELECT COUNT(*) FROM test";
+      var sql = "SELECT \"Id\" FROM test LIMIT 1";
 
       // Act
       var result = connection.ExecuteScalar<long>(sql);
 
       // Assert
       result.ShouldBe((long)1);
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsDateTime()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedOn FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<DateTime>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(DateTime));
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsDateOnly()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT CreatedDate FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<DateOnly>(sql);
+
+      // Assert
+      result.GetType().ShouldBe(typeof(DateOnly));
     }
   }
 }

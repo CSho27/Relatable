@@ -71,6 +71,25 @@ namespace Relatable.UnitTests.Utilities
     }
 
     [Fact]
+    public void ConvertValue_ConvertsToDateOnly()
+    {
+      var x = DateTime.Now;
+      var result = x.ConvertValue<DateOnly>();
+      result.GetType().ShouldBe(typeof(DateOnly));
+      result.ShouldBe(new DateOnly(x.Year, x.Month, x.Day));
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsToNullableDateOnly()
+    {
+      DateTime? x = DateTime.Now;
+      var result = x.ConvertValue<DateOnly?>();
+      result.ShouldNotBeNull();
+      result.GetType().ShouldBe(typeof(DateOnly));
+    }
+
+
+    [Fact]
     public void ConvertValue_ConvertsToByte()
     {
       var x = new sbyte();

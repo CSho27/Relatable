@@ -9,8 +9,8 @@ namespace Relatable.UnitTests.Extensions
     public int FieldInt;
     public bool FieldBool;
     public TestEnum FieldEnum;
-    public string FieldString;
-    public TestClass FieldObject;
+    public string FieldString = "";
+    public TestClass FieldObject = null!;
 
     public int? NullableFieldInt;
     public bool? NullableFieldBool;
@@ -21,8 +21,8 @@ namespace Relatable.UnitTests.Extensions
     public int PropertyInt { get; set; }
     public bool PropertyBool { get; set; }
     public TestEnum PropertyEnum { get; set; }
-    public string PropertyString { get; set; }
-    public TestClass PropertyObject { get; set; }
+    public string PropertyString { get; set; } = "";
+    public TestClass PropertyObject { get; set; } = null!;
 
     public int? NullablePropertyInt { get; set; }
     public bool? NullablePropertyBool { get; set; }
