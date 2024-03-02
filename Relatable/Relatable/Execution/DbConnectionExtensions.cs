@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Relatable.Utilities;
+using System.Data;
 using System.Data.Common;
 
 namespace Relatable.Execution
@@ -10,7 +11,7 @@ namespace Relatable.Execution
       using var command = connection.CreateCommand();
       command.CommandText = sql;
       var result = command.ExecuteScalar();
-      return (T)result!;
+      return result.ConvertValue<T>();
     }
 
     public static async Task<T> ExecuteScalarAsync<T>(this IDbConnection connection, string sql) where T : struct
