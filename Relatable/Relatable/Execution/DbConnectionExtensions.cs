@@ -6,15 +6,14 @@ namespace Relatable.Execution
 {
   public static class DbConnectionExtensions
   {
-    public static T ExecuteScalar<T>(this IDbConnection connection, string sql) where T : struct
+    public static T ExecuteScalar<T>(this IDbConnection connection, string sql)
     {
       using var command = connection.CreateCommand();
       command.CommandText = sql;
-      var result = command.ExecuteScalar();
-      return result.ConvertValue<T>();
+      return command.ExecuteScalar().ConvertValue<T>();
     }
 
-    public static async Task<T> ExecuteScalarAsync<T>(this IDbConnection connection, string sql) where T : struct
+    public static async Task<T> ExecuteScalarAsync<T>(this IDbConnection connection, string sql)
     {
       using var genericCommand = connection.CreateCommand();
       if (genericCommand is not DbCommand command)
@@ -22,7 +21,7 @@ namespace Relatable.Execution
 
       command.CommandText = sql;
       var result = await command.ExecuteScalarAsync();
-      return (T)result!;
+      return result.ConvertValue<T>();
     }
   }
 }

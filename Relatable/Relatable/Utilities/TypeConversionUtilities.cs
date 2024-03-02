@@ -5,7 +5,6 @@ namespace Relatable.Utilities
   {
     public static T ConvertValue<T>(this object? value)
     {
-
       return value is null
         ? default!
         : (T)ConvertValueType(value, typeof(T))!;
