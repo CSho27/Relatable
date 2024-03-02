@@ -26,7 +26,7 @@ namespace Relatable.UnitTests.Utilities
     }
 
     [Fact]
-    public void ConvertValue_ConvertsToEnum()
+    public void ConvertValue_ConvertsIntToEnum()
     {
       var x = 0;
       var result = x.ConvertValue<TestEnum>();
@@ -35,7 +35,7 @@ namespace Relatable.UnitTests.Utilities
     }
 
     [Fact]
-    public void ConvertValue_ConvertsToNullableEnum()
+    public void ConvertValue_ConvertsIntToNullableEnum()
     {
       var x = 0;
       var result = x.ConvertValue<TestEnum?>();
@@ -50,6 +50,15 @@ namespace Relatable.UnitTests.Utilities
       int? x = null;
       var result = x.ConvertValue<TestEnum?>();
       result.ShouldBeNull();
+    }
+
+    [Fact]
+    public void ConvertValue_ConvertsStringToEnum()
+    {
+      var x = "C";
+      var result = x.ConvertValue<TestEnum>();
+      result.ShouldBe(TestEnum.C);
+      result.GetType().ShouldBe(typeof(TestEnum));
     }
 
     [Fact]

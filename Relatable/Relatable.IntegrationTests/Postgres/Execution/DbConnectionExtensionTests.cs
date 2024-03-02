@@ -3,7 +3,7 @@ using Shouldly;
 
 namespace Relatable.IntegrationTests.Postgres.Execution
 {
-  public enum TestEnum { A, B, C }
+  public enum TestEnum { A, B, TestName }
 
   public class DbConnectionExtensionTests
   {
@@ -19,6 +19,20 @@ namespace Relatable.IntegrationTests.Postgres.Execution
 
       // Assert
       result.ShouldBe(TestEnum.B);
+    }
+
+    [Fact]
+    public void ExecuteScalar_ReturnsStringEnum()
+    {
+      // Arrange
+      using var connection = PostgresConnectionFactory.OpenConnection();
+      var sql = "SELECT \"Name\" FROM test LIMIT 1";
+
+      // Act
+      var result = connection.ExecuteScalar<TestEnum>(sql);
+
+      // Assert
+      result.ShouldBe(TestEnum.TestName);
     }
 
     [Fact]

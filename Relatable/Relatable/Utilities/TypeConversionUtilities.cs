@@ -18,7 +18,12 @@ namespace Relatable.Utilities
         : type;
 
 
-      if(underlyingType.IsEnum)
+      if(underlyingType.IsEnum && value.GetType() == typeof(string))
+      {
+        var values = Enum.GetValues(underlyingType).Cast<object>();
+        return values.Single(v => string.Equals(v.ToString(), (string)value, StringComparison.InvariantCultureIgnoreCase));
+      }
+      if (underlyingType.IsEnum)
       {
         var values = Enum.GetValues(underlyingType).Cast<object>();
         return values.Single(v => (int)v == value.ConvertValue<int>());
