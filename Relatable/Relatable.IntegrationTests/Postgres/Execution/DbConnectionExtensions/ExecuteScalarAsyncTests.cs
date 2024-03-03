@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Relatable.IntegrationTests.Postgres.Execution.DbConnectionExtensions
 {
-  public class ExecuteScalarAsync
+  public class ExecuteScalarAsyncTests
   {
     // ExecuteScalarAsync
     [Fact]

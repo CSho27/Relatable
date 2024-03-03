@@ -5,7 +5,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution.DbConnectionExtensions
 {
     public enum TestEnum { A, B, TestName }
 
-    public class ExecuteScalar
+    public class ExecuteScalarTests
     {
         // ExecuteScalar
         [Fact]
