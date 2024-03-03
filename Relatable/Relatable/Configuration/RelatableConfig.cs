@@ -1,4 +1,4 @@
-﻿using Relatable.Querying.Abstractions;
+﻿using Relatable.Abstractions.Querying;
 
 namespace Relatable.Configuration
 {
