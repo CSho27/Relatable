@@ -34,17 +34,17 @@ namespace Relatable.Execution
         return false;
       }
 
-      row = reader.ReadRow(returnType);
+      row = reader.ConstructRow(returnType);
       return true;
     }
 
-    public static T ReadRow<T>(this IDataReader reader)
+    public static T ConstructRow<T>(this IDataReader reader)
     {
       var returnType = typeof(T);
-      return (T)ReadRow(reader, returnType);
+      return (T)ConstructRow(reader, returnType);
     }
 
-    public static object ReadRow(this IDataReader reader, Type returnType)
+    public static object ConstructRow(this IDataReader reader, Type returnType)
     {
       var constructor = returnType.GetConstructor([]);
       // NOTE: It would be kind of nice if it didn't have to, but we'd have to figure out how to construct all the parameters by name
@@ -54,7 +54,7 @@ namespace Relatable.Execution
       for (var i = 0; i < reader.FieldCount; i++)
       {
         var fieldName = reader.GetName(i);
-        var property = returnType.GetProperty(fieldName, BindingFlags.IgnoreCase);
+        var property = returnType.GetProperty(fieldName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         if (property is null)
           continue;
 
