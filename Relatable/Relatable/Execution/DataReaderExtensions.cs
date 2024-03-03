@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Relatable.Utilities;
+using System.Data;
 using System.Reflection;
 
 namespace Relatable.Execution
@@ -58,7 +59,7 @@ namespace Relatable.Execution
         if (property is null)
           continue;
 
-        property.SetValue(returnObj, reader[i]);
+        property.SetValue(returnObj, reader[i].ConvertValue(property.PropertyType));
       }
 
       return returnObj;

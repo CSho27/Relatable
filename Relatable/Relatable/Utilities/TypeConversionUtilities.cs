@@ -5,9 +5,14 @@ namespace Relatable.Utilities
   {
     public static T ConvertValue<T>(this object? value)
     {
+      return (T)ConvertValue(value, typeof(T))!;
+    }
+
+    public static object? ConvertValue(this object? value, Type type)
+    {
       return value is null
         ? default!
-        : (T)ConvertValueType(value, typeof(T));
+        : ConvertValueType(value, type);
     }
 
     private static object ConvertValueType(object value, Type type)
