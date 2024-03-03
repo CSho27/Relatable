@@ -25,7 +25,17 @@ namespace Relatable.UnitTests.Execution
     public bool Private { get; private set; }
   }
 
-  public class DataReaderExtensionTests
+    public class TestNoCtor
+    {
+      public int Id { get; }
+
+      public TestNoCtor(int id)
+      {
+        Id = id;
+      }
+    }
+
+    public class DataReaderExtensionTests
   {
     [Fact]
     public void ConstructRow_WithMatchingFieldOrder_CorrectlyConstructsEntity()
@@ -152,6 +162,18 @@ namespace Relatable.UnitTests.Execution
       row.Protected.ShouldBeTrue();
       row.ProtectedInternal.ShouldBeTrue();
       row.Private.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void ConstructRow_WhenTypeHasNoConstructor_Throws()
+    {
+      // Arrange
+      var mockDataReader = Substitute.For<IDataReader>();
+      mockDataReader.Read().Returns(true);
+      mockDataReader.FieldCount.Returns(5);
+
+      // Act/Assert
+      Should.Throw<Exception>(mockDataReader.ConstructRow<TestNoCtor>);
     }
   }
 }

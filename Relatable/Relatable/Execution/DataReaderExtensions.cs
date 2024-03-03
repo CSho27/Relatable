@@ -47,11 +47,10 @@ namespace Relatable.Execution
 
     public static object ConstructRow(this IDataReader reader, Type returnType)
     {
-      var constructor = returnType.GetConstructor([]);
-      // NOTE: It would be kind of nice if it didn't have to, but we'd have to figure out how to construct all the parameters by name
-      if (constructor is null)
-        throw new Exception("Return type must have a parameterless constructor");
-      var returnObj = constructor.Invoke([]);
+      var returnObj = Activator.CreateInstance(returnType)!;
+      if (returnObj is null)
+        throw new Exception($"Failed to construct type {returnType}");
+
       for (var i = 0; i < reader.FieldCount; i++)
       {
         var fieldName = reader.GetName(i);
