@@ -33,7 +33,8 @@ namespace Relatable.Execution
       while (hasRow)
       {
         (hasRow, var row) = await reader.TryReadRowAsync(type);
-        rows.Add(row!);
+        if(hasRow)
+          rows.Add(row!);
       }
       return rows;
     }
