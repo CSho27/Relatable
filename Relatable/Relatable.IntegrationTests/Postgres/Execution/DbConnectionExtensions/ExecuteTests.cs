@@ -15,6 +15,7 @@ namespace Relatable.IntegrationTests.Postgres.Execution.DbConnectionExtensions
       // Act
       var results = connection.Execute<TestEntity>(sql);
 
+      // Assert
       results.Count().ShouldBe(3);
       for(var i=0; i<3; i++)
       {
