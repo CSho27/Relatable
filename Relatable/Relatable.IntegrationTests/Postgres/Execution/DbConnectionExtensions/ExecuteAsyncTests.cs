@@ -1,25 +1,30 @@
 ﻿using Relatable.Execution;
 using Shouldly;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Relatable.IntegrationTests.Postgres.Execution.DbConnectionExtensions
 {
-  public class ExecuteTests
+  public class ExecuteAsyncTests
   {
     [Fact]
-    public void Execute_ReturnsMappedRows()
+    public async Task ExecuteAsync_ReturnsMappedRows()
     {
       // Arrange
       using var connection = PostgresConnectionFactory.OpenConnection();
       var sql = "SELECT * FROM test";
 
       // Act
-      var results = connection.Execute<TestEntity>(sql);
+      var results = await connection.ExecuteAsync<TestEntity>(sql);
 
       results.Count().ShouldBe(3);
-      for(var i=0; i<3; i++)
+      for (var i = 0; i < 3; i++)
       {
         var result = results.ElementAt(i);
-        result.Id.ShouldBe(i+1);
+        result.Id.ShouldBe(i + 1);
         result.Name.ShouldBe("TestName");
         result.Description.ShouldBe("This is a test description");
         result.CreatedOn.ShouldBe(DateTime.Parse("2024-03-02 15:52:56.310556"));
