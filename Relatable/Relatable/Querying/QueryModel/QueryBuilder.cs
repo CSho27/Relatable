@@ -7,34 +7,36 @@ namespace Relatable.Querying.QueryModel
 {
   public class QueryBuilder : IQueryModel
   {
-    private string? _from { get; set; }
-    private List<string> _selects = new List<string>();
-    private List<IJoin> _joins = new List<IJoin>();
-    private List<string> _whereClauses = new List<string>();
-    private List<IOrderBy> _orderByClauses = new List<IOrderBy>();
-    private List<string> _groupByClauses = new List<string>();
-    private Dictionary<string, string> _parameters = new Dictionary<string, string>();
+    public string? FromClause { get; private set; }
+    public List<string> SelectClauses { get; } = new List<string>();
+    public List<IJoin> JoinClauses { get; } = new List<IJoin>();
+    public List<string> WhereClauses { get; } = new List<string>();
+    public List<IOrderBy> OrderByClauses { get; } = new List<IOrderBy>();
+    public List<string> GroupByClauses { get; } = new List<string>();
+    public Dictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
 
-    string? IQueryModel.From => _from;
-    IEnumerable<string> IQueryModel.Selects => _selects;
-    IEnumerable<IJoin> IQueryModel.Joins => _joins;
-    IEnumerable<string> IQueryModel.WhereClauses => _whereClauses;
-    IEnumerable<IOrderBy> IQueryModel.OrderByClauses => _orderByClauses;
-    IEnumerable<string> IQueryModel.GroupByClauses => _groupByClauses;
-    IImmutableDictionary<string, string> IQueryModel.Parameters => _parameters.ToImmutableDictionary();
+    string? IQueryModel.From => FromClause;
+    IEnumerable<string> IQueryModel.Selects => SelectClauses;
+    IEnumerable<IJoin> IQueryModel.Joins => JoinClauses;
+    IEnumerable<string> IQueryModel.WhereClauses => WhereClauses;
+    IEnumerable<IOrderBy> IQueryModel.OrderByClauses => OrderByClauses;
+    IEnumerable<string> IQueryModel.GroupByClauses => GroupByClauses;
+    IImmutableDictionary<string, string> IQueryModel.Parameters => Parameters.ToImmutableDictionary();
 
     public QueryBuilder Select(params string[] selects)
     {
-      _selects.AddRange(selects);
+      SelectClauses.AddRange(selects);
       return this;
     }
 
     public QueryBuilder From(string from)
     {
-      _from = from;
+      if (FromClause is not null)
+        throw new InvalidOperationException("Query only can contain one from. Add fetch additional data, please use a join.");
+
+      FromClause = from;
       return this;
     }
-
 
     public QueryBuilder InnerJoin(string table, string on) => Join(table, on, JoinType.Inner);
     public QueryBuilder LeftJoin(string table, string on) => Join(table, on, JoinType.Left);
@@ -62,13 +64,13 @@ namespace Relatable.Querying.QueryModel
         Table = table,
         On = on
       };
-      _joins.Add(join);
+      JoinClauses.Add(join);
       return this;
     }
 
     public QueryBuilder Where(string where, object? parameters = null)
     {
-      _whereClauses.Add(where);
+      WhereClauses.Add(where);
       return parameters is not null
         ? AddParameters(parameters)
         : this;
@@ -76,7 +78,7 @@ namespace Relatable.Querying.QueryModel
 
     public QueryBuilder Where(string where, IDictionary<string, object>? parameters = null)
     {
-      _whereClauses.Add(where);
+      WhereClauses.Add(where);
       return parameters is not null
         ? AddParameters(parameters)
         : this;
@@ -85,28 +87,34 @@ namespace Relatable.Querying.QueryModel
     public QueryBuilder OrderByDescending(string orderBy) => OrderBy(orderBy, ListSortDirection.Descending);
     public QueryBuilder OrderBy(string orderBy, ListSortDirection direction = ListSortDirection.Ascending)
     {
-      _orderByClauses.Add(new OrderBy { OrderByValue = orderBy, SortDirection = direction });
+      OrderByClauses.Add(new OrderBy { OrderByValue = orderBy, SortDirection = direction });
       return this;
     }
 
     public QueryBuilder GroupBy(string groupBy)
     {
-      _groupByClauses.Add(groupBy);
+      GroupByClauses.Add(groupBy);
       return this;
     }
 
     public QueryBuilder AddParameters(object parameters)
     {
       foreach (var property in parameters.GetType().GetProperties())
-        _parameters.Add(ToParameterName(property.Name), ToParameterString(property.GetValue(parameters)));
+        Parameters.Add(ToParameterName(property.Name), ToParameterString(property.GetValue(parameters)));
 
       return this;
     }
 
-    public QueryBuilder AddParameters(IDictionary<string, object> parameters)
+    public QueryBuilder AddParameters<TKey, TValue>(IDictionary<TKey, TValue> parameters)
     {
       foreach (var parameter in parameters)
-        _parameters.Add(ToParameterName(parameter.Key), ToParameterString(parameter.Value));
+      {
+        var key = parameter.Key?.ToString();
+        if (key is null)
+          throw new ArgumentException("Parameter key cannot resolve to null");
+
+        Parameters.Add(ToParameterName(key), ToParameterString(parameter.Value));
+      }
 
       return this;
     }
