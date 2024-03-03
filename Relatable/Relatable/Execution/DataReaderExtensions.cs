@@ -1,5 +1,6 @@
 ﻿using Relatable.Utilities;
 using System.Data;
+using System.Data.Common;
 using System.Reflection;
 
 namespace Relatable.Execution
@@ -19,9 +20,27 @@ namespace Relatable.Execution
       return rows;
     }
 
+    public static async Task<IEnumerable<T>> ReadAllRowsAsync<T>(this IDataReader reader)
+    {
+      var rows = await reader.ReadAllRowsAsync(typeof(T));
+      return rows.Cast<T>();
+    }
+
+    public static async Task<IEnumerable<object>> ReadAllRowsAsync(this IDataReader reader, Type type)
+    {
+      var rows = new List<object>();
+      var hasRow = true;
+      while (hasRow)
+      {
+        (hasRow, var row) = await reader.TryReadRowAsync(type);
+        rows.Add(row!);
+      }
+      return rows;
+    }
+
     public static bool TryReadRow<T>(this IDataReader reader, out T? row)
     {
-      var result = TryReadRow(reader, typeof(T), out var readRow);
+      var result = reader.TryReadRow(typeof(T), out var readRow);
       row = (T?)readRow;
       return result;
     }
@@ -39,10 +58,28 @@ namespace Relatable.Execution
       return true;
     }
 
+    public static async Task<(bool HasRow, T Row)> TryReadRowAsync<T>(this IDataReader reader)
+    {
+      var (hasRow, row) = await reader.TryReadRowAsync(typeof(T));
+      return (hasRow, (T)row!);
+    }
+
+    public static async Task<(bool HasRow, object? Row)> TryReadRowAsync(this IDataReader reader, Type returnType)
+    {
+      if(reader is not DbDataReader asyncReader)
+        throw new InvalidOperationException("Provided DataReader does not support reading async");
+
+      var hasRow = await asyncReader.ReadAsync();
+      if (!hasRow)
+        return (false, default);
+
+      return (true, asyncReader.ConstructRow(returnType));
+    }
+
     public static T ConstructRow<T>(this IDataReader reader)
     {
       var returnType = typeof(T);
-      return (T)ConstructRow(reader, returnType);
+      return (T)reader.ConstructRow(returnType);
     }
 
     public static object ConstructRow(this IDataReader reader, Type returnType)
