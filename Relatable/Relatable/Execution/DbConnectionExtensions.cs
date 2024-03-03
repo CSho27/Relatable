@@ -31,5 +31,15 @@ namespace Relatable.Execution
       using var reader = command.ExecuteReader();
       return reader.ReadAllRows<T>();
     }
+
+    public static async Task<IEnumerable<T>> ExecuteAsync<T>(this IDbConnection connection, string sql)
+    {
+      using var genericCommand = connection.CreateCommand();
+      if (genericCommand is not DbCommand command)
+        throw new InvalidOperationException("Provided DbConnection does not support async execution");
+      command.CommandText = sql;
+      using var reader = await command.ExecuteReaderAsync();
+      return await reader.ReadAllRowsAsync<T>();
+    }
   }
 }
