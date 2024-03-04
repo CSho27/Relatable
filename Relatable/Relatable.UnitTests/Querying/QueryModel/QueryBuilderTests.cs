@@ -176,6 +176,21 @@ namespace Relatable.UnitTests.Querying.QueryModel
     }
 
     [Fact]
+    public void GroupBy_ShouldAddGroupByClause()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.GroupBy("Entity.Id");
+
+      // Assert
+      queryBuilder.GroupByClauses.Count.ShouldBe(1);
+      var onlyGroupBy = queryBuilder.GroupByClauses.Single();
+      onlyGroupBy.ShouldBe("Entity.Id");
+    }
+
+    [Fact]
     public void AddParamaters_ShouldAddParameters_ForObjectParameters()
     {
       // Arrange
