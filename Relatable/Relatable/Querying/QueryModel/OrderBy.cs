@@ -1,5 +1,4 @@
 ﻿using Relatable.Abstractions.Querying.QueryModel;
-using System.ComponentModel;
 
 namespace Relatable.Querying.QueryModel
 {
@@ -7,6 +6,6 @@ namespace Relatable.Querying.QueryModel
   {
     public string OrderByValue { get; init; } = "";
     string IOrderBy.OrderBy => OrderByValue;
-    public ListSortDirection SortDirection { get; init; }
+    public SortDirection SortDirection { get; init; }
   }
 }

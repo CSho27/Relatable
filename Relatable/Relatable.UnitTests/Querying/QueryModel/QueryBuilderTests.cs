@@ -121,7 +121,6 @@ namespace Relatable.UnitTests.Querying.QueryModel
       queryBuilder.Where("Entity.Id = @Id", new { Id = 1 });
 
       // Assert
-      // Assert
       queryBuilder.Parameters.Count.ShouldBe(1);
       var onlyParameter = queryBuilder.Parameters.Single();
       onlyParameter.Key.ShouldBe("@Id");
@@ -137,7 +136,6 @@ namespace Relatable.UnitTests.Querying.QueryModel
       // Act
       queryBuilder.Where("Entity.Id = @Id", new Dictionary<string, object> { { "Id", 1 } });
 
-      // Assert
       // Assert
       queryBuilder.Parameters.Count.ShouldBe(1);
       var onlyParameter = queryBuilder.Parameters.Single();
@@ -193,6 +191,7 @@ namespace Relatable.UnitTests.Querying.QueryModel
       onlyParameter.Value.ShouldBe("1");
     }
 
+    [Fact]
     public void AddParamater_ShouldAddParameter()
     {
       // Arrange

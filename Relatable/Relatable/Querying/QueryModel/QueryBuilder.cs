@@ -84,8 +84,8 @@ namespace Relatable.Querying.QueryModel
         : this;
     }
 
-    public QueryBuilder OrderByDescending(string orderBy) => OrderBy(orderBy, ListSortDirection.Descending);
-    public QueryBuilder OrderBy(string orderBy, ListSortDirection direction = ListSortDirection.Ascending)
+    public QueryBuilder OrderByDescending(string orderBy) => OrderBy(orderBy, SortDirection.Desc);
+    public QueryBuilder OrderBy(string orderBy, SortDirection direction = SortDirection.Asc)
     {
       OrderByClauses.Add(new OrderBy { OrderByValue = orderBy, SortDirection = direction });
       return this;
