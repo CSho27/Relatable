@@ -144,6 +144,38 @@ namespace Relatable.UnitTests.Querying.QueryModel
     }
 
     [Fact]
+    public void OrderBy_ShouldAddOrderByClause()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.OrderBy("Entity.Id");
+
+      // Assert
+      queryBuilder.OrderByClauses.Count.ShouldBe(1);
+      var onlyOrderBy = queryBuilder.OrderByClauses.Single();
+      onlyOrderBy.OrderBy.ShouldBe("Entity.Id");
+      onlyOrderBy.SortDirection.ShouldBe(Abstractions.Querying.QueryModel.SortDirection.Asc);
+    }
+
+    [Fact]
+    public void OrderByDescending_ShouldAddOrderByClause()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.OrderByDescending("Entity.Id");
+
+      // Assert
+      queryBuilder.OrderByClauses.Count.ShouldBe(1);
+      var onlyOrderBy = queryBuilder.OrderByClauses.Single();
+      onlyOrderBy.OrderBy.ShouldBe("Entity.Id");
+      onlyOrderBy.SortDirection.ShouldBe(Abstractions.Querying.QueryModel.SortDirection.Desc);
+    }
+
+    [Fact]
     public void AddParamaters_ShouldAddParameters_ForObjectParameters()
     {
       // Arrange
