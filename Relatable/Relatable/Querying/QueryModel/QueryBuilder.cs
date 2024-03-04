@@ -44,7 +44,7 @@ namespace Relatable.Querying.QueryModel
     public QueryBuilder FullJoin(string table, string on) => Join(table, on, JoinType.Full);
     public QueryBuilder CrossJoin(string table, string on) => Join(table, on, JoinType.Cross);
 
-    public QueryBuilder Join(string table, string on, JoinType type, IDictionary<string, object> parameters)
+    public QueryBuilder Join<TKey, TValue>(string table, string on, JoinType type, IDictionary<TKey, TValue> parameters)
     {
       var qm = AddParameters(parameters);
       return qm.Join(table, on, type);
@@ -76,7 +76,7 @@ namespace Relatable.Querying.QueryModel
         : this;
     }
 
-    public QueryBuilder Where(string where, IDictionary<string, object>? parameters = null)
+    public QueryBuilder Where<TKey, TValue>(string where, IDictionary<TKey, TValue>? parameters = null)
     {
       WhereClauses.Add(where);
       return parameters is not null

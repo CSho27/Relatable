@@ -96,6 +96,56 @@ namespace Relatable.UnitTests.Querying.QueryModel
     }
 
     [Fact]
+    public void Where_ShouldAddWhereClause()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.Where("Entity.Id = 1");
+
+      // Assert
+      queryBuilder.WhereClauses.Count.ShouldBe(1);
+      var onlyWhere = queryBuilder.WhereClauses.Single();
+      onlyWhere.ShouldBe("Entity.Id = 1");
+    }
+
+
+    [Fact]
+    public void Where_ShouldAddParameters_IfObjectParametersIncluded()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.Where("Entity.Id = @Id", new { Id = 1 });
+
+      // Assert
+      // Assert
+      queryBuilder.Parameters.Count.ShouldBe(1);
+      var onlyParameter = queryBuilder.Parameters.Single();
+      onlyParameter.Key.ShouldBe("@Id");
+      onlyParameter.Value.ShouldBe("1");
+    }
+
+    [Fact]
+    public void Where_ShouldAddParameters_IfDictionarytParametersIncluded()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.Where("Entity.Id = @Id", new Dictionary<string, object> { { "Id", 1 } });
+
+      // Assert
+      // Assert
+      queryBuilder.Parameters.Count.ShouldBe(1);
+      var onlyParameter = queryBuilder.Parameters.Single();
+      onlyParameter.Key.ShouldBe("@Id");
+      onlyParameter.Value.ShouldBe("1");
+    }
+
+    [Fact]
     public void AddParamaters_ShouldAddParameters_ForObjectParameters()
     {
       // Arrange
