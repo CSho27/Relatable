@@ -192,5 +192,35 @@ namespace Relatable.UnitTests.Querying.QueryModel
       onlyParameter.Key.ShouldBe("@LinkedId");
       onlyParameter.Value.ShouldBe("1");
     }
+
+    [Fact]
+    public void AddParamaters_ShouldIgnoreLeadingAt_ForObject()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.AddParameters(new { @Id = 1 });
+
+      // Assert
+      queryBuilder.Parameters.Count.ShouldBe(1);
+      var onlyParameter = queryBuilder.Parameters.Single();
+      onlyParameter.Key.ShouldBe("@Id");
+    }
+
+    [Fact]
+    public void AddParamaters_ShouldIgnoreLeadingAt_ForDict()
+    {
+      // Arrange
+      var queryBuilder = new QueryBuilder();
+
+      // Act
+      queryBuilder.AddParameters(new Dictionary<string, int> { { "@Id", 1 } });
+
+      // Assert
+      queryBuilder.Parameters.Count.ShouldBe(1);
+      var onlyParameter = queryBuilder.Parameters.Single();
+      onlyParameter.Key.ShouldBe("@Id");
+    }
   }
 }
