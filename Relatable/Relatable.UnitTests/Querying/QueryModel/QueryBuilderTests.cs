@@ -193,29 +193,29 @@ namespace Relatable.UnitTests.Querying.QueryModel
       onlyParameter.Value.ShouldBe("1");
     }
 
-    [Fact]
-    public void AddParamaters_ShouldIgnoreLeadingAt_ForObject()
+    public void AddParamater_ShouldAddParameter()
     {
       // Arrange
       var queryBuilder = new QueryBuilder();
 
       // Act
-      queryBuilder.AddParameters(new { @Id = 1 });
+      queryBuilder.AddParameter("Id", 1);
 
       // Assert
       queryBuilder.Parameters.Count.ShouldBe(1);
       var onlyParameter = queryBuilder.Parameters.Single();
       onlyParameter.Key.ShouldBe("@Id");
+      onlyParameter.Value.ShouldBe("1");
     }
 
     [Fact]
-    public void AddParamaters_ShouldIgnoreLeadingAt_ForDict()
+    public void AddParamater_ShouldIgnoreLeadingAt()
     {
       // Arrange
       var queryBuilder = new QueryBuilder();
 
       // Act
-      queryBuilder.AddParameters(new Dictionary<string, int> { { "@Id", 1 } });
+      queryBuilder.AddParameter("@Id", 1);
 
       // Assert
       queryBuilder.Parameters.Count.ShouldBe(1);

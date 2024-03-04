@@ -100,7 +100,7 @@ namespace Relatable.Querying.QueryModel
     public QueryBuilder AddParameters(object parameters)
     {
       foreach (var property in parameters.GetType().GetProperties())
-        Parameters.Add(ToParameterName(property.Name), ToParameterString(property.GetValue(parameters)));
+        AddParameter(property.Name, property.GetValue(parameters));
 
       return this;
     }
@@ -113,9 +113,15 @@ namespace Relatable.Querying.QueryModel
         if (key is null)
           throw new ArgumentException("Parameter key cannot resolve to null");
 
-        Parameters.Add(ToParameterName(key), ToParameterString(parameter.Value));
+        AddParameter(key, parameter.Value);
       }
 
+      return this;
+    }
+
+    public QueryBuilder AddParameter(string name, object? value)
+    {
+      Parameters.Add(ToParameterName(name), ToParameterValue(value));
       return this;
     }
 
@@ -135,7 +141,7 @@ namespace Relatable.Querying.QueryModel
         : $"@{name}";
     }
 
-    private string ToParameterString(object? parameterValue)
+    private string ToParameterValue(object? parameterValue)
     {
       if (parameterValue is null)
         return "NULL";
